@@ -53,15 +53,16 @@ The API will be available at: `http://127.0.0.1:8000`
 
 ## 📋 API Endpoints
 
-| Method | Endpoint      | Description              |
-|--------|---------------|--------------------------|
-| GET    | `/contracts`  | Returns all contracts    |
-| GET    | `/docs`       | Interactive Swagger UI   |
-| GET    | `/redoc`      | ReDoc API documentation  |
+| Method | Endpoint                        | Description                          |
+|--------|---------------------------------|--------------------------------------|
+| GET    | `/contracts`                    | Returns all contracts                |
+| GET    | `/contracts/{contract_id}`      | Returns a single contract by ID      |
+| GET    | `/docs`                         | Interactive Swagger UI               |
+| GET    | `/redoc`                        | ReDoc API documentation              |
 
 ---
 
-## 📄 Sample Response
+## 📄 Sample Responses
 
 **GET** `/contracts`
 
@@ -77,6 +78,23 @@ The API will be available at: `http://127.0.0.1:8000`
   }
 ]
 ```
+
+**GET** `/contracts/{contract_id}`
+
+Request: `/contracts/CT001`
+
+```json
+{
+  "id": "CT001",
+  "contract_name": "Contract 001",
+  "contract_type": "Master Services Agreement",
+  "contract_status": "Active",
+  "contract_start_date": "January 1, 2023",
+  "contract_end_date": "December 31, 2026"
+}
+```
+
+> **Note:** The `contract_id` lookup is **case-insensitive** (e.g., `ct001` and `CT001` both work).
 
 ---
 

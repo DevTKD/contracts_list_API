@@ -55,4 +55,9 @@ CONTRACTS= [
 async def contracts_list():
     return CONTRACTS
 
-
+#adding a dynamic parameter
+@app.get("/contracts/{contract_id}")
+async def contracts_detail(contract_id: str):
+    for contract in CONTRACTS:
+        if contract.get("id").casefold() == contract_id.casefold():
+            return contract
