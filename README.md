@@ -53,12 +53,13 @@ The API will be available at: `http://127.0.0.1:8000`
 
 ## 📋 API Endpoints
 
-| Method | Endpoint                        | Description                          |
-|--------|---------------------------------|--------------------------------------|
-| GET    | `/contracts`                    | Returns all contracts                |
-| GET    | `/contracts/{contract_id}`      | Returns a single contract by ID      |
-| GET    | `/docs`                         | Interactive Swagger UI               |
-| GET    | `/redoc`                        | ReDoc API documentation              |
+| Method | Endpoint                              | Description                                           |
+|--------|---------------------------------------|-------------------------------------------------------|
+| GET    | `/contracts`                          | Returns all contracts                                 |
+| GET    | `/contracts/{contract_id}`            | Returns a single contract by ID                       |
+| GET    | `/contracts/{contract_id}/?contract_type=<type>` | Returns contracts matching both ID and type |
+| GET    | `/docs`                               | Interactive Swagger UI                                |
+| GET    | `/redoc`                              | ReDoc API documentation                               |
 
 ---
 
@@ -94,7 +95,24 @@ Request: `/contracts/CT001`
 }
 ```
 
-> **Note:** The `contract_id` lookup is **case-insensitive** (e.g., `ct001` and `CT001` both work).
+**GET** `/contracts/{contract_id}/?contract_type=<type>`
+
+Request: `/contracts/CT003/?contract_type=Partnership Agreement`
+
+```json
+[
+  {
+    "id": "CT003",
+    "contract_name": "Contract 003",
+    "contract_type": "Partnership Agreement",
+    "contract_status": "Active",
+    "contract_start_date": "January 1, 2025",
+    "contract_end_date": "December 31, 2027"
+  }
+]
+```
+
+> **Note:** The `contract_id` and `contract_type` lookups are **case-insensitive** (e.g., `ct001` and `CT001` both work).
 
 ---
 

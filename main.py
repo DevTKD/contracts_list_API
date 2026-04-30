@@ -61,3 +61,13 @@ async def contracts_detail(contract_id: str):
     for contract in CONTRACTS:
         if contract.get("id").casefold() == contract_id.casefold():
             return contract
+
+#adding a path and query parameter
+@app.get("/contracts/{contract_id}/")
+async def contract_id_type_by_query(contract_id: str, contract_type: str):
+    contracts_to_return = []
+    for contract in CONTRACTS:
+        if contract.get("id").casefold() == contract_id.casefold() and \
+                contract.get("contract_type").casefold() == contract_type.casefold():
+            contracts_to_return.append(contract)
+    return contracts_to_return
