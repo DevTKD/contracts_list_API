@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import Body, FastAPI
 app = FastAPI()
 # Establish contracts list 
 CONTRACTS= [
@@ -71,3 +71,8 @@ async def contract_id_type_by_query(contract_id: str, contract_type: str):
                 contract.get("contract_type").casefold() == contract_type.casefold():
             contracts_to_return.append(contract)
     return contracts_to_return
+
+#adding a post-request
+@app.post("/contracts/create_contract")
+async def create_contract(new_contract=Body()):
+    CONTRACTS.append(new_contract)
