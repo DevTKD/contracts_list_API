@@ -76,3 +76,11 @@ async def contract_id_type_by_query(contract_id: str, contract_type: str):
 @app.post("/contracts/create_contract")
 async def create_contract(new_contract=Body()):
     CONTRACTS.append(new_contract)
+
+#adding a put-request
+@app.put("/contracts/update_contract")
+async def update_contract(updated_contract=Body()):
+    for i in range(len(CONTRACTS)):
+        if CONTRACTS[i].get("id").casefold() == updated_contract.get("id").casefold():
+            CONTRACTS[i] = updated_contract
+
