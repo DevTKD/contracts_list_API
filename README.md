@@ -11,6 +11,7 @@ A simple REST API built with **FastAPI** that manages and returns a list of cont
 - Filter contracts by ID and contract type
 - Create a new contract
 - Update an existing contract
+- Delete an existing contract
 - Each contract includes ID, name, type, status, and start/end dates
 - Built with FastAPI for fast, modern Python API development
 
@@ -64,6 +65,7 @@ The API will be available at: `http://127.0.0.1:8000`
 | GET    | `/contracts/{contract_id}/?contract_type=<type>` | Returns contracts matching ID and type     |
 | POST   | `/contracts/create_contract`                    | Creates a new contract                       |
 | PUT    | `/contracts/update_contract`                    | Updates an existing contract by ID in body   |
+| DELETE | `/contracts/delete_contract/{contract_id}`      | Deletes a contract by ID                     |
 | GET    | `/docs`                                         | Interactive Swagger UI                       |
 | GET    | `/redoc`                                        | ReDoc API documentation                      |
 
@@ -148,7 +150,11 @@ Request body:
 }
 ```
 
-> **Note:** ID matching is case-insensitive in lookup/update comparisons (for example, `ct001` and `CT001` both match).
+**DELETE** `/contracts/delete_contract/{contract_id}`
+
+Request: `/contracts/delete_contract/CT002`
+
+> **Note:** ID matching is case-insensitive in lookup, update, and delete comparisons (for example, `ct001` and `CT001` both match).
 
 ---
 

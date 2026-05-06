@@ -84,3 +84,10 @@ async def update_contract(updated_contract=Body()):
         if CONTRACTS[i].get("id").casefold() == updated_contract.get("id").casefold():
             CONTRACTS[i] = updated_contract
 
+#Adding a delete-request
+@app.delete("/contracts/delete_contract/{contract_id}")
+async def delete_contract(contract_id: str):
+    for i in range(len(CONTRACTS)):
+        if CONTRACTS[i].get("id").casefold() == contract_id.casefold():
+            CONTRACTS.pop(i)
+            break

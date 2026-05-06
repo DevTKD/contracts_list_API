@@ -22,6 +22,7 @@ This allows me to work with meaningful, real-world data instead of placeholders.
 | **May 1, 2026** | Query Parameters | Combined path and query parameters (`contract_id` + `contract_type`). Maintained consistent list-based response structure. |
 | **May 2, 2026** | POST Endpoint | Implemented `POST /contracts/create_contract` to add new contracts. Used `Body()` to accept request data and append it to the in-memory `CONTRACTS` list. Returned a confirmation response with `201 Created` status. |
 | **May 6, 2026** | PUT Endpoint | Implemented `PUT /contracts/{contract_id}` to update an existing contract by ID. Added update logic to modify matching contract fields in the in-memory `CONTRACTS` list and return the updated contract. |
+| **May 6, 2026** | DELETE Endpoint | Implemented `DELETE /contracts/delete_contract/{contract_id}` to remove a contract by ID. Added case-insensitive ID matching and delete logic with `pop()` once a match is found. |
 
 ---
 
@@ -34,7 +35,8 @@ This allows me to work with meaningful, real-world data instead of placeholders.
   - `GET /contracts/{contract_id}`
   - `GET /contracts/{contract_id}?contract_type=...`
   - `POST /contracts/create_contract` — Create a new contract
-  - `PUT /contracts/{contract_id}` — Update an existing contract by ID
+  - `PUT /contracts/update_contract` — Update an existing contract by ID (ID provided in request body)
+  - `DELETE /contracts/delete_contract/{contract_id}` — Delete a contract by ID
 - Case-insensitive ID matching
 - Auto-generated API documentation:
   - Swagger UI (`/docs`)
@@ -47,7 +49,6 @@ This allows me to work with meaningful, real-world data instead of placeholders.
 - No database (data resets on server restart)
 - Missing error handling (e.g., 404 responses)
 - No data validation (raw dictionaries instead of models)
-- No DELETE endpoint yet
 - No authentication
 
 ---
@@ -57,5 +58,5 @@ This allows me to work with meaningful, real-world data instead of placeholders.
 - Add proper HTTP error handling (404, etc.)
 - Introduce Pydantic models for validation
 - Integrate a database for persistence
-- Implement POST (completed), PUT (completed), DELETE (pending)
+- Implement POST (completed), PUT (completed), DELETE (completed)
 - Add basic authentication
