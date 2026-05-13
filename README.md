@@ -14,6 +14,24 @@ A simple REST API built with **FastAPI** that manages and returns a list of cont
 - Delete an existing contract
 - Each contract includes ID, name, type, status, and start/end dates
 - Built with FastAPI for fast, modern Python API development
+- Contract class with structured attributes (implemented in `main2.py`)
+- Data validation with Pydantic models in progress
+
+---
+
+## 📊 Data Model
+
+The **Contract** class defines the structure of each contract:
+
+```python
+class Contract:
+    contract_id: str
+    contract_name: str
+    contract_type: str
+    contract_status: str
+    contract_start_date: str
+    contract_end_date: str
+```
 
 ---
 
@@ -22,6 +40,7 @@ A simple REST API built with **FastAPI** that manages and returns a list of cont
 - **Python 3.12**
 - **FastAPI**
 - **Uvicorn** (ASGI server)
+- **Pydantic** (data validation — in progress)
 
 ---
 
@@ -162,7 +181,8 @@ Request: `/contracts/delete_contract/CT002`
 
 ```
 contracts_list_API/
-├── main.py           # Main FastAPI application
+├── main.py           # Main FastAPI application with all CRUD endpoints
+├── main2.py          # Experimental version with Contract class
 ├── test_main.http    # HTTP request test file
 ├── DEVNOTES.md       # Development log and learning notes
 ├── .gitignore        # Git ignore rules

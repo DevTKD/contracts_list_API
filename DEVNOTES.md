@@ -23,6 +23,8 @@ This allows me to work with meaningful, real-world data instead of placeholders.
 | **May 2, 2026** | POST Endpoint | Implemented `POST /contracts/create_contract` to add new contracts. Used `Body()` to accept request data and append it to the in-memory `CONTRACTS` list. Returned a confirmation response with `201 Created` status. |
 | **May 6, 2026** | PUT Endpoint | Implemented `PUT /contracts/{contract_id}` to update an existing contract by ID. Added update logic to modify matching contract fields in the in-memory `CONTRACTS` list and return the updated contract. |
 | **May 6, 2026** | DELETE Endpoint | Implemented `DELETE /contracts/delete_contract/{contract_id}` to remove a contract by ID. Added case-insensitive ID matching and delete logic with `pop()` once a match is found. |
+| **May 12, 2026** | Contract Class | Built `Contract` class in `main2.py` with all required attributes (`contract_id`, `contract_name`, `contract_type`, `contract_status`, `contract_start_date`, `contract_end_date`). Initialized `CONTRACTS` list with actual class instances instead of raw dictionaries. |
+| **May 12, 2026** | Pydantic Models | Starting implementation of Pydantic models for data validation. Planning to replace raw dictionaries and add type validation for request/response bodies. |
 
 ---
 
@@ -48,15 +50,14 @@ This allows me to work with meaningful, real-world data instead of placeholders.
 
 - No database (data resets on server restart)
 - Missing error handling (e.g., 404 responses)
-- No data validation (raw dictionaries instead of models)
+- Data validation in progress (Pydantic models being implemented)
 - No authentication
 
 ---
 
 ## 🚧 Next Steps
 
+- Introduce Pydantic models for validation (in progress)
 - Add proper HTTP error handling (404, etc.)
-- Introduce Pydantic models for validation
 - Integrate a database for persistence
-- Implement POST (completed), PUT (completed), DELETE (completed)
 - Add basic authentication
