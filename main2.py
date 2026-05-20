@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Literal
+from typing import Literal, Optional
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 app  = FastAPI()
 
 class Contract:
-    contract_id: str
+    contract_id: int
     contract_name: str
     contract_type: str
     contract_status: Literal["active", "inactive"]
@@ -23,27 +23,37 @@ class Contract:
         self.contract_start_date = contract_start_date
         self.contract_end_date = contract_end_date
 
-# ToDo: Update contract_id to an optional
+
 class ContractRequest(BaseModel):
-    contract_id: str
+    contract_id: Optional[int] = None
     contract_name: str = Field(min_length=3)
     contract_type: str = Field(min_length=3)
-    contract_status: Literal["active", "inactive"]
+    contract_status: Literal["Active", "Inactive"]
     contract_start_date: date
     contract_end_date: date
 
-# ToDo: fix dates in CONTRACTS
+
 CONTRACTS = [
-    Contract("CT001", "Bilateral NDA", "NDA", "Active", "01/20/2025", "01/19/2027"),
-    Contract("CT002", "Master Services Agreement", "MSA", "Active", "06/18/2022", "06/17/2027"),
-    Contract("CT003", "Vendor Agreement", "Vendor Service Agreement", "Inactive", "01/20/2025", "03/19/2026"),
-    Contract("CT004", "Unilateral NDA", "NDA", "Active", "03/20/2025", "03/19/2027"),
-    Contract("CT005", "Statement of Work", "SOW", "Active", "01/20/2025", "01/19/2027"),
-    Contract("CT006", "Order Form", "OF", "Inactive", "08/18/2000", "08/17/2015")
+    Contract(1, "Bilateral NDA", "NDA", "Active", date(2025, 1, 20), date(2027, 1, 19)),
+    Contract(2, "Master Services Agreement", "MSA", "Active", date(2022, 6, 18), date(2027, 6, 17)),
+    Contract(3, "Vendor Agreement", "Vendor Service Agreement", "Inactive", date(2025, 1, 20), date(2026, 3, 19)),
+    Contract(4, "Unilateral NDA", "NDA", "Active", date(2025, 3, 20), date(2027, 3, 19)),
+    Contract(5, "Statement of Work", "SOW", "Active", date(2025, 1, 20), date(2027, 1, 19)),
+    Contract(6, "Order Form", "OF", "Inactive", date(2000, 8, 18), date(2015, 8, 17))
 ]
 
 @app.get("/contracts")
 async def get_all_contracts():
     return CONTRACTS
 
-# ToDo: add post endpoint and function around automatic numbering of the contract IDs
+@app.post("/create-contract")
+async def create_contract(contract_request: ContractRequest):
+    new_contract = Contract(**contract_request.model_dump())
+    CONTRACTS.append(find_contract_id(new_contract))
+    
+def find_contract_id(contract: Contract):
+    if len(CONTRACTS) > 0:
+        contract.contract_id = CONTRACTS[-1].contract_id + 1
+    else:
+        contract.id = 1
+    return contract
