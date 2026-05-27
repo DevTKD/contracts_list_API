@@ -25,13 +25,24 @@ class Contract:
 
 
 class ContractRequest(BaseModel):
-    contract_id: Optional[int] = None
+    contract_id: Optional[int] = Field(description = "ID is not needed on create", default = None)
     contract_name: str = Field(min_length=3)
     contract_type: str = Field(min_length=3)
     contract_status: Literal["Active", "Inactive"]
-    contract_start_date: date
+    contract_start_date: date = Field(default_factory=date.today)
     contract_end_date: date
 
+    model_config = {
+        "json_schema_extra":{
+            "example": {
+                "contract_name" : "New contract name",
+                "contract_type" : "MSA",
+                "contract_status" : "Active",
+                "contract_start_date" : "2026-05-27",
+                "contract_end_date" : "2027-05-27"
+            }
+        }
+    }
 
 CONTRACTS = [
     Contract(1, "Bilateral NDA", "NDA", "Active", date(2025, 1, 20), date(2027, 1, 19)),
@@ -45,6 +56,14 @@ CONTRACTS = [
 @app.get("/contracts")
 async def get_all_contracts():
     return CONTRACTS
+
+@app.get("/contracts/{contract_id}")
+async def retrieve_contract(contract_id: int):
+    for contract in CONTRACTS:
+        if contract.contract_id == contract.contract_id:
+            return contract
+    return None
+
 
 @app.post("/create-contract")
 async def create_contract(contract_request: ContractRequest):
