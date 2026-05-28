@@ -60,10 +60,17 @@ async def get_all_contracts():
 @app.get("/contracts/{contract_id}")
 async def retrieve_contract(contract_id: int):
     for contract in CONTRACTS:
-        if contract.contract_id == contract.contract_id:
+        if contract.contract_id == contract_id:
             return contract
     return None
 
+@app.get("/contracts/")
+async def retrieve_contract_by_status(contract_status: str):
+    contracts_to_return = []
+    for contract in CONTRACTS:
+        if contract.contract_status.casefold() == contract_status.casefold():
+            contracts_to_return.append(contract)
+    return contracts_to_return
 
 @app.post("/create-contract")
 async def create_contract(contract_request: ContractRequest):
