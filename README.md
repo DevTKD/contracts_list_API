@@ -1,196 +1,101 @@
 # Contracts List API
 
-A simple REST API built with **FastAPI** that manages and returns a list of contracts.
+FastAPI learning project for managing contracts, with active development tracked in `main2.py`.
 
 ---
 
-## 🚀 Features
+## Current Progress (`main2.py`)
 
-- Retrieve a full list of contracts
-- Retrieve a single contract by ID
-- Filter contracts by ID and contract type
-- Create a new contract
-- Update an existing contract
-- Delete an existing contract
-- Each contract includes ID, name, type, status, and start/end dates
-- Built with FastAPI for fast, modern Python API development
-- Contract class with structured attributes (implemented in `main2.py`)
-- Data validation with Pydantic models in progress
+- Added a `Contract` class to represent contract records.
+- Added a `ContractRequest` Pydantic model for request validation.
+- Updated `contract_start_date` and `contract_end_date` to real `date` types.
+- Added optional `contract_id` on create requests; ID is auto-assigned when missing.
+- Added Pydantic `model_config` example payload with ISO date format.
 
 ---
 
-## 📊 Data Model
+## Tech Stack
 
-The **Contract** class defines the structure of each contract:
-
-```python
-class Contract:
-    contract_id: str
-    contract_name: str
-    contract_type: str
-    contract_status: str
-    contract_start_date: str
-    contract_end_date: str
-```
+- Python 3.12
+- FastAPI
+- Pydantic
+- Uvicorn
 
 ---
 
-## 🛠️ Tech Stack
-
-- **Python 3.12**
-- **FastAPI**
-- **Uvicorn** (ASGI server)
-- **Pydantic** (data validation — in progress)
-
----
-
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/DevTKD/contracts_list_API.git
-   cd contracts_list_API
-   ```
-
-2. **Create and activate a virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install fastapi uvicorn
-   ```
-
----
-
-## ▶️ Running the API
+## Run `main2.py`
 
 ```bash
-uvicorn main:app --reload
+uvicorn main2:app --reload
 ```
 
-The API will be available at: `http://127.0.0.1:8000`
+API base URL: `http://127.0.0.1:8000`
+
+Docs:
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
 
 ---
 
-## 📋 API Endpoints
+## Active Endpoints in `main2.py`
 
-| Method | Endpoint                                        | Description                                  |
-|--------|-------------------------------------------------|----------------------------------------------|
-| GET    | `/contracts`                                    | Returns all contracts                        |
-| GET    | `/contracts/{contract_id}`                      | Returns a single contract by ID              |
-| GET    | `/contracts/{contract_id}/?contract_type=<type>` | Returns contracts matching ID and type     |
-| POST   | `/contracts/create_contract`                    | Creates a new contract                       |
-| PUT    | `/contracts/update_contract`                    | Updates an existing contract by ID in body   |
-| DELETE | `/contracts/delete_contract/{contract_id}`      | Deletes a contract by ID                     |
-| GET    | `/docs`                                         | Interactive Swagger UI                       |
-| GET    | `/redoc`                                        | ReDoc API documentation                      |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/contracts` | Return all contracts |
+| GET | `/contracts/{contract_id}` | Return one contract by numeric ID |
+| POST | `/create-contract` | Create a contract (auto-assign ID if not provided) |
 
 ---
 
-## 📄 Sample Responses
+## Request Model (`ContractRequest`)
 
-**GET** `/contracts`
-
-```json
-[
-  {
-    "id": "CT001",
-    "contract_name": "Contract 001",
-    "contract_type": "Master Services Agreement",
-    "contract_status": "Active",
-    "contract_start_date": "January 1, 2023",
-    "contract_end_date": "December 31, 2026"
-  }
-]
+```python
+class ContractRequest(BaseModel):
+    contract_id: Optional[int] = None
+    contract_name: str
+    contract_type: str
+    contract_status: Literal["Active", "Inactive"]
+    contract_start_date: date = Field(default_factory=date.today)
+    contract_end_date: date
 ```
 
-**GET** `/contracts/{contract_id}`
-
-Request: `/contracts/CT001`
+### Example create payload
 
 ```json
 {
-  "id": "CT001",
-  "contract_name": "Contract 001",
-  "contract_type": "Master Services Agreement",
+  "contract_name": "New contract name",
+  "contract_type": "MSA",
   "contract_status": "Active",
-  "contract_start_date": "January 1, 2023",
-  "contract_end_date": "December 31, 2026"
+  "contract_start_date": "2026-05-27",
+  "contract_end_date": "2027-05-27"
 }
 ```
 
-**GET** `/contracts/{contract_id}/?contract_type=<type>`
-
-Request: `/contracts/CT003/?contract_type=Partnership Agreement`
-
-```json
-[
-  {
-    "id": "CT003",
-    "contract_name": "Contract 003",
-    "contract_type": "Partnership Agreement",
-    "contract_status": "Active",
-    "contract_start_date": "January 1, 2025",
-    "contract_end_date": "December 31, 2027"
-  }
-]
-```
-
-**POST** `/contracts/create_contract`
-
-Request body:
-
-```json
-{
-  "id": "CT007",
-  "contract_name": "Contract 007",
-  "contract_type": "Vendor Agreement",
-  "contract_status": "Pending",
-  "contract_start_date": "January 1, 2029",
-  "contract_end_date": "December 31, 2031"
-}
-```
-
-**PUT** `/contracts/update_contract`
-
-Request body:
-
-```json
-{
-  "id": "CT002",
-  "contract_name": "Contract 002",
-  "contract_type": "Consulting Agreement",
-  "contract_status": "Active",
-  "contract_start_date": "January 1, 2024",
-  "contract_end_date": "December 31, 2025"
-}
-```
-
-**DELETE** `/contracts/delete_contract/{contract_id}`
-
-Request: `/contracts/delete_contract/CT002`
-
-> **Note:** ID matching is case-insensitive in lookup, update, and delete comparisons (for example, `ct001` and `CT001` both match).
+Notes:
+- Use ISO format for dates: `YYYY-MM-DD`.
+- `contract_id` is optional for create requests.
 
 ---
 
-## 📁 Project Structure
+## Known Gaps in `main2.py`
 
-```
+- `GET /contracts/{contract_id}` currently compares `contract.contract_id` to itself instead of the input parameter, so ID filtering needs a small fix.
+- `create_contract` currently appends and does not return a response body yet.
+- `find_contract_id` sets `contract.id` in the empty-list branch; it should set `contract.contract_id`.
+- PUT/DELETE routes are not implemented in `main2.py` yet.
+- No explicit 404 handling yet when a contract is not found.
+
+---
+
+## Project Structure
+
+```text
 contracts_list_API/
-├── main.py           # Main FastAPI application with all CRUD endpoints
-├── main2.py          # Experimental version with Contract class
-├── test_main.http    # HTTP request test file
-├── DEVNOTES.md       # Development log and learning notes
-├── .gitignore        # Git ignore rules
-└── README.md         # Project documentation
+├── main.py
+├── main2.py
+├── DEVNOTES.md
+├── test_main.http
+├── .gitignore
+└── README.md
 ```
 
----
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
